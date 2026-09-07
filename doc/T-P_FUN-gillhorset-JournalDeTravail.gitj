@@ -1,0 +1,81 @@
+{
+  "projectName": "P_FUN-ProgrammationFonctionnelle",
+  "me": "Gillian-LHorset",
+  "journalStartDate": null,
+  "columns": [
+    {
+      "label": "Date",
+      "source": "date",
+      "format": "date",
+      "field": "date"
+    },
+    {
+      "label": "Tâche",
+      "source": "name",
+      "field": "name"
+    },
+    {
+      "label": "Description",
+      "source": "description",
+      "field": "description"
+    },
+    {
+      "label": "Durée",
+      "source": "duration",
+      "format": "duration",
+      "field": "duration"
+    },
+    {
+      "label": "Statut",
+      "source": "status",
+      "format": "badge",
+      "field": "status"
+    },
+    {
+      "label": "Auteur",
+      "source": "author"
+    }
+  ],
+  "exceptions": [
+    {
+      "id": "549165ad-d27c-4533-ac03-f7af3e681e98",
+      "type": "commitless",
+      "author": "Gillian-LHorset",
+      "date": "2026-08-24T07:30:00.000Z",
+      "name": "Analyse fonctionnelle",
+      "description": "",
+      "duration": 45,
+      "status": "DONE"
+    },
+    {
+      "id": "05891145-75e7-4f67-9969-e4a409f2bb7f",
+      "type": "commitless",
+      "author": "Gillian-LHorset",
+      "date": "2026-08-24T07:13:00.000Z",
+      "name": "Création des User Stories",
+      "description": "Création de 6 US différente",
+      "duration": 135,
+      "status": "DONE"
+    },
+    {
+      "id": "7aae761f-d076-4ef1-9def-aa611cc6ec0a",
+      "type": "commitless",
+      "author": "Gillian-LHorset",
+      "date": "2026-08-31T07:15:00.000Z",
+      "name": "Plannification initial",
+      "description": "",
+      "duration": 15,
+      "status": "DONE"
+    },
+    {
+      "id": "6794d238-06cf-4074-9dbb-8b7716858b34",
+      "type": "commitless",
+      "author": "Gillian-LHorset",
+      "date": "2026-08-31T07:17:00.000Z",
+      "name": "Rédaction du rapport",
+      "description": "Ajout des points demander dans le cahier des charges (Intro, analyse fonctionnelle, planification initiale)",
+      "duration": 120,
+      "status": "DONE"
+    }
+  ]
+}
