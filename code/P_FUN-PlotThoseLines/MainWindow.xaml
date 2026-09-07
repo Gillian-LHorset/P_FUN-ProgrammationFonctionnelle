@@ -4,9 +4,100 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:P_FUN_PlotThoseLines"
+        xmlns:ScottPlot="clr-namespace:ScottPlot.WPF;assembly=ScottPlot.WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="MainWindow" MinHeight="550" MinWidth="800" Height="600" Width="900">
+    
+    <StackPanel Margin="0,0,0,-40" >
+        <StackPanel.Resources>
+            <Style TargetType="{x:Type Grid}">
+                <Setter Property="Margin" Value="0,0,0,10"/>
+            </Style>
+        </StackPanel.Resources>
+        <DockPanel>
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="Importer">
+                    <MenuItem Header="_Ouvrir"  />
+                </MenuItem>
 
-    </Grid>
+                <MenuItem Header="Changement de graphique">
+                    <MenuItem Header="Aucun graphique disponible" />
+                </MenuItem>
+            </Menu>
+
+        </DockPanel>
+
+        <Grid>
+            <TextBox Grid.Column="1" Text="Date de début" HorizontalAlignment="Right" VerticalAlignment="Center" Width="200" Height="40" TextAlignment="Center" />
+
+            <TextBox Grid.Column="1" Grid.Row="1" Text="Date de fin" HorizontalAlignment="Right" VerticalAlignment="Center" Width="200" Height="40" TextAlignment="Center" />
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.1*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="0.1*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"></RowDefinition>
+                <RowDefinition Height="50"></RowDefinition>
+            </Grid.RowDefinitions>
+        </Grid>
+
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.1*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="0.1*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition MinHeight="250"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Border BorderBrush="Black" BorderThickness="1" Grid.Column="1">
+                <ScottPlot:WpfPlot Grid.Column="1" Grid.Row="0" x:Name="WpfPlot1" Width="auto" Height="auto"/>
+            </Border>
+            
+        </Grid>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.1*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="0.1*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Border BorderBrush="Black" BorderThickness="1" Grid.Column="1">
+                <Grid Height="100" Width="750">
+
+                    <TextBlock Grid.Column="0" Grid.Row="0" Text="" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="0" Grid.Row="1" Text="" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="0" Grid.Row="2" Text="" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    
+                    <TextBlock Grid.Column="1" Grid.Row="0" Text="" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="1" Grid.Row="1" Text="" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="1" Grid.Row="2" Text="" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    
+                    <TextBlock Grid.Column="2" Grid.Row="0" Text="" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="2" Grid.Row="1" Text="" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="2" Grid.Row="2" Text="" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"></RowDefinition>
+                        <RowDefinition Height="1*"></RowDefinition>
+                        <RowDefinition Height="1*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                </Grid>
+            </Border>
+        </Grid>
+    </StackPanel>
+
 </Window>
