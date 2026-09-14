@@ -32,10 +32,9 @@ namespace P_FUN_PlotThoseLines {
                     // verify if the db exist
                     db.Database.EnsureCreated();
                     // add values to the db
-                    foreach (var item in temperatures.Values) {
-                        db.Temp.Add(item);
-                        await db.SaveChangesAsync();
-                    }
+                    temperatures.Values.ToList().ForEach(t => db.Temp.Add(t));
+                    await db.SaveChangesAsync();
+
 
                 }
 
