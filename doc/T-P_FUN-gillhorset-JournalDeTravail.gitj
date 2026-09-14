@@ -76,6 +76,36 @@
       "description": "Ajout des points demander dans le cahier des charges (Intro, analyse fonctionnelle, planification initiale)",
       "duration": 120,
       "status": "DONE"
+    },
+    {
+      "id": "1f05a70d-b126-4a3f-adb2-3d7a00cf2954",
+      "type": "commitless",
+      "author": "Gillian-LHorset",
+      "date": "2026-09-07T09:03:00.000Z",
+      "name": "Discussion avec le chef de projet",
+      "description": "Debrief de la livraison du 4 septembre",
+      "duration": 10,
+      "status": "DONE"
+    },
+    {
+      "id": "68b1cf83-7998-47ba-98bc-76b8ecfdec93",
+      "type": "commitless",
+      "author": "Gillian-LHorset",
+      "date": "2026-09-07T09:15:00.000Z",
+      "name": "Récuperation de données pour les tests",
+      "description": "",
+      "duration": 10,
+      "status": "DONE"
+    },
+    {
+      "id": "8b531bfa-67ab-43fa-b4f6-c2dc18ae7959",
+      "type": "commitless",
+      "author": "Gillian-LHorset",
+      "date": "2026-09-14T06:09:00.000Z",
+      "name": "Retour du client sur les commits git",
+      "description": "",
+      "duration": 9,
+      "status": "DONE"
     }
   ]
 }
