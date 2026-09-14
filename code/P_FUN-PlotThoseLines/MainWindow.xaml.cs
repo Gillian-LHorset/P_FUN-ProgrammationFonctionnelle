@@ -1,4 +1,5 @@
 ﻿using DataSeries;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
 using System.Windows;
 
@@ -11,34 +12,57 @@ namespace P_FUN_PlotThoseLines {
             InitializeComponent();
 
 
-            double[] dataX = { 1, 2, 3, 4, 5 };
-            double[] dataY = { 1, 4, 9, 16, 25 };
-            WpfPlot1.Plot.Add.Scatter(dataX, dataY);
             WpfPlot1.Refresh();
         }
 
 
-        public void dataImport(object sender, RoutedEventArgs e) {
+        public async void dataImport(object sender, RoutedEventArgs e) {
+            // open the file explorer
             var openFile = new OpenFileDialog();
+            // can import only csv
             openFile.DefaultExt = "*.csv";
             openFile.Filter = "Csv Files (*.csv)|*.csv";
+            // if the user chooses a file
             if (openFile.ShowDialog() == true) {
                 string filePath = openFile.FileName;
 
-                DataSeries<TemperatureSet> temperatures;
-                temperatures = DataSeries<TemperatureSet>.FromCsv(filePath, ParseTemperatrue);
+                DataSeries<TemperatureSet> temperatures = DataSeries<TemperatureSet>.FromCsv(filePath, ParseTemperatrue);
+
+                using (var db = new TemperatureContext()) {
+                    // verify if the db exist
+                    db.Database.EnsureCreated();
+                    // add values to the db
+                    foreach (var item in temperatures.Values) {
+                        db.Temp.Add(item);
+                        await db.SaveChangesAsync();
+                    }
+
+                }
 
                 MessageBox.Show($"count : {temperatures.Count}");
             }
         }
 
-        TemperatureSet ParseTemperatrue(string[] cols) {
+        public void showData(TemperatureSet temp) {
+
+        }
+
+        private TemperatureSet ParseTemperatrue(string[] cols) {
             TemperatureSet temp = new TemperatureSet(cols[0], DateTime.Parse(cols[1]), Double.Parse(cols[2]));
 
             return temp;
         }
 
+    }
 
+    public class TemperatureContext : DbContext {
+        // db structure
+        public DbSet<TemperatureSet> Temp { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
+            optionsBuilder.UseSqlite(
+                @"Data Source=temperature.db");
+        }
     }
 }
 
