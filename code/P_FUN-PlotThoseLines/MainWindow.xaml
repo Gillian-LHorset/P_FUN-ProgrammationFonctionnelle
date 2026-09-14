@@ -55,7 +55,7 @@
             </Grid.RowDefinitions>
 
             <Border BorderBrush="Black" BorderThickness="1" Grid.Column="1">
-                <ScottPlot:WpfPlot Grid.Column="1" Grid.Row="0" x:Name="WpfPlot1" Width="auto" Height="auto"/>
+                <ScottPlot:WpfPlot Grid.Column="1" Grid.Row="0" x:Name="MainGraph" Width="auto" Height="auto"/>
             </Border>
             
         </Grid>

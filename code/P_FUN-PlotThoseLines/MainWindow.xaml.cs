@@ -12,7 +12,7 @@ namespace P_FUN_PlotThoseLines {
             InitializeComponent();
 
 
-            WpfPlot1.Refresh();
+            MainGraph.Refresh();
         }
 
 
@@ -35,15 +35,22 @@ namespace P_FUN_PlotThoseLines {
                     temperatures.Values.ToList().ForEach(t => db.Temp.Add(t));
                     await db.SaveChangesAsync();
 
-
                 }
+
+                showData(temperatures);
 
                 MessageBox.Show($"count : {temperatures.Count}");
             }
         }
 
-        public void showData(TemperatureSet temp) {
+        public void showData(DataSeries<TemperatureSet> temp) {
+            double[] xPoints = temp.Values.Select(t => t.time.ToOADate()).ToArray();
+            double[] yPoints = temp.Values.Select(t => t.temperature).ToArray();
 
+            MainGraph.Plot.Add.Scatter(xPoints, yPoints);
+            MainGraph.Plot.Axes.DateTimeTicksBottom();
+
+            MainGraph.Refresh();
         }
 
         private TemperatureSet ParseTemperatrue(string[] cols) {
