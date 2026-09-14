@@ -13,4 +13,8 @@
     <PackageReference Include="ScottPlot.WPF" Version="5.1.59" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DataSeries\DataSeries.csproj" />
+  </ItemGroup>
+
 </Project>

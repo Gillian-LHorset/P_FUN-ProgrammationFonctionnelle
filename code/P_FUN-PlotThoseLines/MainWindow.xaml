@@ -17,7 +17,7 @@
         <DockPanel>
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="Importer">
-                    <MenuItem Header="_Ouvrir"  />
+                    <MenuItem Header="_Ouvrir" Click="dataImport" />
                 </MenuItem>
 
                 <MenuItem Header="Changement de graphique">
