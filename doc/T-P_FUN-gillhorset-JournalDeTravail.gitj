@@ -126,6 +126,19 @@
       "description": "",
       "duration": 10,
       "status": "DONE"
+    },
+    {
+      "id": "791b95e0-9b6d-4302-9b10-4e42b9e5dc82",
+      "type": "commitpatch",
+      "sha": "2402c7728b754e05300b5a8309b5da14ce5dec82",
+      "url": "https://github.com/Gillian-LHorset/P_FUN-ProgrammationFonctionnelle/commit/2402c7728b754e05300b5a8309b5da14ce5dec82",
+      "author": "Gillian-LHorset",
+      "patch": true,
+      "date": "2026-09-28T09:26:00.000Z",
+      "name": "feat(DataCheck): Ajout de la vérification du type de données importé",
+      "description": "",
+      "duration": 50,
+      "status": "DONE"
     }
   ]
 }
