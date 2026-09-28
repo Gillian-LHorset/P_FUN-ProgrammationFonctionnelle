@@ -12,5 +12,6 @@
         public string Location { get; set; }
         public DateTime Time { get; set; }
         public double Temperature { get; set; }
+        public int DataSetId { get; set; }
     }
 }

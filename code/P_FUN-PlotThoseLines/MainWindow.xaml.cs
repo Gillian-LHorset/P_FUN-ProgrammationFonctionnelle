@@ -13,7 +13,6 @@ namespace P_FUN_PlotThoseLines {
         public MainWindow() {
             InitializeComponent();
 
-
             MainGraph.Refresh();
         }
 
@@ -30,12 +29,19 @@ namespace P_FUN_PlotThoseLines {
 
                 DataSeries<TemperatureSet> temperatures = DataSeries<TemperatureSet>.FromCsv(filePath, ParseTemperatrue);
 
-                using (var db = new TemperatureContext()) {
+                using (TemperatureContext dbContext = new TemperatureContext()) {
                     // verify if the db exist
-                    db.Database.EnsureCreated();
+                    dbContext.Database.EnsureCreated();
+
+                    int newId = DbCommunication.GetLastDataSetId(dbContext) + 1;
+
                     // add values to the db
-                    temperatures.Values.ToList().ForEach(t => db.Temp.Add(t));
-                    await db.SaveChangesAsync();
+                    temperatures.Values.ToList().ForEach(t => {
+                        t.DataSetId = newId;
+                        dbContext.Temp.Add(t);
+                    });
+                    await dbContext.SaveChangesAsync();
+
 
                 }
 
