@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace P_FUN_PlotThoseLines {
     /// <summary>
@@ -48,11 +49,25 @@ namespace P_FUN_PlotThoseLines {
             double[] xPoints = temp.Values.Select(t => t.Time.ToOADate()).ToArray();
             double[] yPoints = temp.Values.Select(t => t.Temperature).ToArray();
 
-            MainGraph.Plot.Add.Scatter(xPoints, yPoints);
+            var plot = MainGraph.Plot.Add.Scatter(xPoints, yPoints);
             MainGraph.Plot.Axes.DateTimeTicksBottom();
 
-            TextBlock legendeText = new TextBlock() { Text = temp.Values.FirstOrDefault()?.Location };
-            GraphLegendeGrid.Children.Add(legendeText);
+            // conversion du système de couleur de scottplot vers le système de WPF
+            var wpfColor = System.Windows.Media.Color.FromArgb(
+                plot.Color.A,
+                plot.Color.R,
+                plot.Color.G,
+                plot.Color.B
+            );
+
+            Brush graphColor = new SolidColorBrush(wpfColor);
+
+            TextBlock legendeText = new TextBlock() {
+                Text = temp.Values.FirstOrDefault()?.Location,
+                Padding = new Thickness(25),
+                Foreground = graphColor
+            };
+            GraphLegende.Children.Add(legendeText);
 
             MainGraph.Refresh();
         }
