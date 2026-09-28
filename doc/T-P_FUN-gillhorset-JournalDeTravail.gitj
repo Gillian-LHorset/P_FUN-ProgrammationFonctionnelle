@@ -116,6 +116,16 @@
       "description": "Rattrapage du test du 16 septembre",
       "duration": 30,
       "status": "DONE"
+    },
+    {
+      "id": "ad921c25-8b58-417a-abeb-8fdd0ffb21bb",
+      "type": "commitless",
+      "author": "Gillian-LHorset",
+      "date": "2026-09-28T09:10:00.000Z",
+      "name": "Disscussion avec le chef de projet",
+      "description": "",
+      "duration": 10,
+      "status": "DONE"
     }
   ]
 }

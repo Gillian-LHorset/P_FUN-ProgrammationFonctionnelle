@@ -15,7 +15,7 @@
                     data.Add(parser(cols));
                 }
             } catch (Exception e) {
-                Console.WriteLine($"Erreur d'ouverture du fichier {e.Message}");
+                return null;
             }
             return From(data);
         }

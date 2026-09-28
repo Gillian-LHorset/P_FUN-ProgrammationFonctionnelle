@@ -10,6 +10,8 @@ namespace P_FUN_PlotThoseLines {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
+        TemperatureContext dbContext = new TemperatureContext();
+
         public MainWindow() {
             InitializeComponent();
 
@@ -29,21 +31,12 @@ namespace P_FUN_PlotThoseLines {
 
                 DataSeries<TemperatureSet> temperatures = DataSeries<TemperatureSet>.FromCsv(filePath, ParseTemperatrue);
 
-                using (TemperatureContext dbContext = new TemperatureContext()) {
-                    // verify if the db exist
-                    dbContext.Database.EnsureCreated();
-
-                    int newId = DbCommunication.GetLastDataSetId(dbContext) + 1;
-
-                    // add values to the db
-                    temperatures.Values.ToList().ForEach(t => {
-                        t.DataSetId = newId;
-                        dbContext.Temp.Add(t);
-                    });
-                    await dbContext.SaveChangesAsync();
-
-
+                if (temperatures == null) {
+                    MessageBox.Show($"Importation impossible.\nStructure des données incorrecte.");
+                    return;
                 }
+
+                DbCommunication.RegisterDataInDB(dbContext, temperatures);
 
                 showData(temperatures);
 
@@ -79,11 +72,10 @@ namespace P_FUN_PlotThoseLines {
         }
 
         private TemperatureSet ParseTemperatrue(string[] cols) {
-            TemperatureSet temp = new TemperatureSet(cols[0], DateTime.Parse(cols[1]), Double.Parse(cols[2]));
+            TemperatureSet temp = new TemperatureSet(cols[0].Trim(), DateTime.Parse(cols[1]), Double.Parse(cols[2]));
 
             return temp;
         }
-
     }
 
     public class TemperatureContext : DbContext {
