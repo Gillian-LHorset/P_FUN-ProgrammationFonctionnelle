@@ -3,14 +3,14 @@
         private TemperatureSet() { }
 
         public TemperatureSet(string location, DateTime time, double temperature) {
-            this.location = location;
-            this.time = time;
-            this.temperature = temperature;
+            Location = location;
+            Time = time;
+            Temperature = temperature;
         }
 
         public int Id { get; set; }
-        public string location { get; set; }
-        public DateTime time { get; set; }
-        public double temperature { get; set; }
+        public string Location { get; set; }
+        public DateTime Time { get; set; }
+        public double Temperature { get; set; }
     }
 }

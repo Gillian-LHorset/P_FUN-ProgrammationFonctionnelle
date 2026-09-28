@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace P_FUN_PlotThoseLines {
     /// <summary>
@@ -39,16 +40,19 @@ namespace P_FUN_PlotThoseLines {
 
                 showData(temperatures);
 
-                MessageBox.Show($"count : {temperatures.Count}");
+                //MessageBox.Show($"count : {temperatures.Count}");
             }
         }
 
         public void showData(DataSeries<TemperatureSet> temp) {
-            double[] xPoints = temp.Values.Select(t => t.time.ToOADate()).ToArray();
-            double[] yPoints = temp.Values.Select(t => t.temperature).ToArray();
+            double[] xPoints = temp.Values.Select(t => t.Time.ToOADate()).ToArray();
+            double[] yPoints = temp.Values.Select(t => t.Temperature).ToArray();
 
             MainGraph.Plot.Add.Scatter(xPoints, yPoints);
             MainGraph.Plot.Axes.DateTimeTicksBottom();
+
+            TextBlock legendeText = new TextBlock() { Text = temp.Values.FirstOrDefault()?.Location };
+            GraphLegendeGrid.Children.Add(legendeText);
 
             MainGraph.Refresh();
         }
