@@ -36,15 +36,27 @@ namespace P_FUN_PlotThoseLines {
                     return;
                 }
 
-                DbCommunication.RegisterDataInDB(dbContext, temperatures);
+                // enter a name for the dataset
+                string title = Microsoft.VisualBasic.Interaction.InputBox(
+                    "Veuillez entrer le nom du dataset :",
+                    "Nom du Dataset",
+                    ""
+                );
 
-                showData(temperatures);
+                if (string.IsNullOrWhiteSpace(title)) {
+                    MessageBox.Show("Le nom du dataset ne peut pas être vide.", "Attention", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                DbCommunication.RegisterDataInDB(dbContext, temperatures, title);
+
+                showData(temperatures, title);
 
                 //MessageBox.Show($"count : {temperatures.Count}");
             }
         }
 
-        public void showData(DataSeries<TemperatureSet> temp) {
+        public void showData(DataSeries<TemperatureSet> temp, string title) {
             double[] xPoints = temp.Values.Select(t => t.Time.ToOADate()).ToArray();
             double[] yPoints = temp.Values.Select(t => t.Temperature).ToArray();
 
@@ -62,7 +74,7 @@ namespace P_FUN_PlotThoseLines {
             Brush graphColor = new SolidColorBrush(wpfColor);
 
             TextBlock legendeText = new TextBlock() {
-                Text = temp.Values.FirstOrDefault()?.Location,
+                Text = title,
                 Padding = new Thickness(25),
                 Foreground = graphColor
             };
