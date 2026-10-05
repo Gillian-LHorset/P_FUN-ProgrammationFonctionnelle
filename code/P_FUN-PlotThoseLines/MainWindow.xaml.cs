@@ -36,21 +36,11 @@ namespace P_FUN_PlotThoseLines {
                     return;
                 }
 
-                // enter a name for the dataset
-                string title = Microsoft.VisualBasic.Interaction.InputBox(
-                    "Veuillez entrer le nom du dataset :",
-                    "Nom du Dataset",
-                    ""
-                );
+                await DbCommunication.RegisterDataInDB(dbContext, temperatures);
 
-                if (string.IsNullOrWhiteSpace(title)) {
-                    MessageBox.Show("Le nom du dataset ne peut pas être vide.", "Attention", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
-
-                DbCommunication.RegisterDataInDB(dbContext, temperatures, title);
-
-                showData(temperatures, title);
+                // TODO : récuperer le titre de la dataSerie
+                // TODO : supprimer l'ancien graphique en cas de mise à jour lié aux doublons
+                showData(temperatures, "tempString");
 
                 //MessageBox.Show($"count : {temperatures.Count}");
             }
