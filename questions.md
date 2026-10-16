@@ -20,10 +20,6 @@ await dbContext.SaveChangesAsync();
 - Que signifie async/await ?
 - Qu'est-ce qu'une migration ?
 
-**Éléments attendus d'une réponse convaincante**
-
-- Les entités chargées via le `DbContext` sont **suivies** (_change tracking_). EF Core mémorise leurs valeurs d'origine et, au moment de `SaveChanges`, détecte les propriétés modifiées, puis génère un `UPDATE` pour chacune.
-
 ---
 
 ## Question 2 – Requêtes SQL écrites à la main
@@ -41,10 +37,3 @@ await dbContext.Database.ExecuteSqlInterpolatedAsync(
 ```
 
 - La variable `title` vient directement de ce que l'utilisateur tape dans l'`InputBox`. Si l'utilisateur saisit `Genève'); DROP TABLE Temp; --`, que se passe-t-il ?
-
-**Éléments attendus d'une réponse convaincante**
-
-- Ces méthodes reçoivent un `FormattableString`, pas une chaîne déjà assemblée. EF Core remplace chaque `{…}` par un **paramètre SQL** (`@p0`, `@p1`) et transmet la valeur séparément : elle n'est jamais interprétée comme du SQL. Il n'y a donc pas d'injection, et le titre est enregistré tel quel.
-- La concaténation avec `ExecuteSqlRaw` serait, elle, vulnérable à l'injection.
-- `t_dataset` n'est créée **nulle part** : ni dans le modèle EF, ni dans la migration. Une réponse lucide doit le reconnaître (sur une base neuve, l'`INSERT` échoue).
-- `EnsureCreated` ne fait rien si la base existe déjà, et ne crée que les tables du modèle EF.
