@@ -80,6 +80,25 @@ namespace P_FUN_PlotThoseLines {
             await dbContext.SaveChangesAsync();
         }
 
+        public static async Task<DataSeries<TemperatureSet>> LoadSingleDataSet(TemperatureContext dbContext, int datasetId) {
+
+            // verify si la db existe
+            await dbContext.Database.EnsureCreatedAsync();
+
+            // take all the rows from the db
+            var rows = dbContext.Temp.FromSql(
+                    $"SELECT * FROM Temp WHERE DataSetId = {datasetId}"
+                );
+
+            if (!rows.Any()) {
+                return null;
+            }
+
+            DataSeries<TemperatureSet> temperatures = DataSeries<TemperatureSet>.From(rows);
+
+            return temperatures;
+        }
+
         public static string GetDatasetName(TemperatureContext tempContext, int datasetId) {
             string? title = tempContext.Database
             .SqlQuery<string>($"SELECT title FROM t_dataset WHERE dataset_id = {datasetId} LIMIT 1")

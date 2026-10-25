@@ -12,6 +12,9 @@ namespace P_FUN_PlotThoseLines {
     /// </summary>
     public partial class MainWindow : Window {
         TemperatureContext dbContext = new TemperatureContext();
+        private TemperatureSet[] _showedTemperatureSets;
+        private const int MAX_GRAPH_SHOWED = 5;
+
 
         public MainWindow() {
             InitializeComponent();
