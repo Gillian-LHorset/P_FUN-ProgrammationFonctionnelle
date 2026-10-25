@@ -13,7 +13,7 @@ namespace P_FUN_PlotThoseLines {
             return id;
         }
 
-        public static async Task<string> RegisterDataInDB(TemperatureContext dbContext, DataSeries<TemperatureSet> temperatures) {
+        public static async Task<(string title, int? id, Boolean? isDuplicate)> RegisterDataInDB(TemperatureContext dbContext, DataSeries<TemperatureSet> temperatures) {
 
             // verify si la db existe
             await dbContext.Database.EnsureCreatedAsync();
@@ -31,15 +31,14 @@ namespace P_FUN_PlotThoseLines {
             List<TemperatureSet> inserts = incomingList.Where(t => !existingDataDictionnary.ContainsKey((t.Location, t.Time))).ToList();
 
             string title = "";
+            int id;
+            Boolean isDuplicate = false;
 
             if (updates.Any()) {
                 // cas où il y a des doublons dans la db
 
                 // récupère le DataSetId de la première donnée en doublon
                 int existingDataSetId = existingDataDictionnary[(updates[0].Location, updates[0].Time)].DataSetId;
-
-
-                MessageBox.Show("" + existingDataSetId, "Attention", MessageBoxButton.OK, MessageBoxImage.Warning);
 
                 // écrase uniquement la température des doublons
                 updates.ForEach(t => existingDataDictionnary[(t.Location, t.Time)].Temperature = t.Temperature);
@@ -50,6 +49,8 @@ namespace P_FUN_PlotThoseLines {
 
                 MessageBox.Show("Des doublons ont été détectés !\nLes données importées ont écrasé les données précédentes.", "Attention", MessageBoxButton.OK, MessageBoxImage.Warning);
                 title = GetDatasetName(dbContext, existingDataSetId);
+                id = existingDataSetId;
+                isDuplicate = true;
             } else {
                 // cas où il n'y a pas de doublons dans la db
 
@@ -61,12 +62,12 @@ namespace P_FUN_PlotThoseLines {
 
                 if (string.IsNullOrWhiteSpace(title)) {
                     MessageBox.Show("Nommer le dataset est obligatoire.", "Attention", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return null;
+                    return (null, null, null);
                 }
 
                 if (title.Length > 100) {
                     MessageBox.Show("Le nom choisi pour le dataset est trop long.", "Attention", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return null;
+                    return (null, null, null);
                 }
 
                 // nouvel id des données importées
@@ -79,6 +80,7 @@ namespace P_FUN_PlotThoseLines {
 
                 // Toutes les données reçoivent ce newId
                 inserts.ForEach(t => t.DataSetId = newId);
+                id = newId;
             }
 
             // ajout des nouvelles données qui peuvent être présentes dans les deux cas du if précédent
@@ -87,7 +89,7 @@ namespace P_FUN_PlotThoseLines {
             }
 
             await dbContext.SaveChangesAsync();
-            return title;
+            return (title, id, isDuplicate);
         }
 
         public static async Task<DataSeries<TemperatureSet>> LoadSingleDataSet(TemperatureContext dbContext, int datasetId) {

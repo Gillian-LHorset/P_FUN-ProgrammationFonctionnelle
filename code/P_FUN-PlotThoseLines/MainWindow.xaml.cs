@@ -13,7 +13,8 @@ namespace P_FUN_PlotThoseLines {
     /// </summary>
     public partial class MainWindow : Window {
         TemperatureContext dbContext = new TemperatureContext();
-        private TemperatureSet[] _showedTemperatureSets;
+        // list of the Scatters present in the main graph
+        private Dictionary<int, (Scatter graph, TextBlock? legend)> _showedTemperatureSets = new Dictionary<int, (Scatter, TextBlock?)>();
         private const int MAX_GRAPH_SHOWED = 5;
 
 
@@ -41,19 +42,37 @@ namespace P_FUN_PlotThoseLines {
                     return;
                 }
 
-                string title = await DbCommunication.RegisterDataInDB(dbContext, temperatures);
+                var DataSerieInfo = await DbCommunication.RegisterDataInDB(dbContext, temperatures);
+                int? id = DataSerieInfo.id;
+                string title = DataSerieInfo.title;
+                Boolean? isDuplicate = DataSerieInfo.isDuplicate;
 
-                // TODO : supprimer l'ancien graphique en cas de mise à jour lié aux doublons
-                if (title == null) {
+                if (title == null || id == null || isDuplicate == null) {
                     return;
                 }
-                showData(temperatures, title);
+
+                var dataInfos = showData(temperatures, title);
+                Scatter plot = dataInfos.Item1;
+                TextBlock legend = dataInfos.Item2;
+
+                // need to write in this form because of the nullable Boolean
+                if (isDuplicate == true) {
+                    if (_showedTemperatureSets.ContainsKey(id!.Value) && id is not null) { // case the plot is already present in the graph
+                        RemovePlotFromTheMainGraph(_showedTemperatureSets[id!.Value].graph);
+                        GraphLegende.Children.Remove(_showedTemperatureSets[id!.Value].legend);
+                        _showedTemperatureSets[id!.Value] = (plot, legend);
+                    } else {
+                        _showedTemperatureSets.Add(DbCommunication.GetLastDataSetId(dbContext), (plot, legend));
+                    }
+                } else {
+                    _showedTemperatureSets.Add(DbCommunication.GetLastDataSetId(dbContext), (plot, legend));
+                }
 
                 //MessageBox.Show($"count : {temperatures.Count}");
             }
         }
 
-        public void showData(DataSeries<TemperatureSet> temp, string title) {
+        public (Scatter, TextBlock) showData(DataSeries<TemperatureSet> temp, string title) {
             double[] xPoints = temp.Values.Select(t => t.Time.ToOADate()).ToArray();
             double[] yPoints = temp.Values.Select(t => t.Temperature).ToArray();
 
@@ -61,19 +80,20 @@ namespace P_FUN_PlotThoseLines {
             MainGraph.Plot.Axes.DateTimeTicksBottom();
 
             // conversion du système de couleur de scottplot vers le système de WPF
-            Color wpfColor = System.Windows.Media.Color.FromArgb(
+            System.Windows.Media.Color wpfColor = System.Windows.Media.Color.FromArgb(
                 plot.Color.A,
                 plot.Color.R,
                 plot.Color.G,
                 plot.Color.B
             );
 
-            ShowLegend(wpfColor, title);
+            TextBlock legend = ShowLegend(wpfColor, title);
 
             MainGraph.Refresh();
+            return (plot, legend);
         }
 
-        private void ShowLegend(Color foregroundColor, string title) {
+        private TextBlock ShowLegend(System.Windows.Media.Color foregroundColor, string title) {
             Brush legendBrush = new SolidColorBrush(foregroundColor);
 
             TextBlock legendeText = new TextBlock() {
@@ -82,6 +102,7 @@ namespace P_FUN_PlotThoseLines {
                 Foreground = legendBrush
             };
             GraphLegende.Children.Add(legendeText);
+            return legendeText;
         }
 
         private TemperatureSet ParseTemperatrue(string[] cols) {
@@ -92,6 +113,10 @@ namespace P_FUN_PlotThoseLines {
                 Double.Parse(cols[2], CultureInfo.InvariantCulture));
 
             return temp;
+        }
+
+        private void RemovePlotFromTheMainGraph(Scatter plot) {
+            MainGraph.Plot.Remove(plot);
         }
     }
 
