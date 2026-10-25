@@ -11,10 +11,17 @@
             try {
                 List<string> content = File.ReadAllLines(filename).ToList();
                 foreach (string line in content.Skip(1)) {
+                    if (string.IsNullOrWhiteSpace(line)) {
+                        continue;
+                    }
                     string[] cols = line.Split(';');
+                    if (cols.Any(string.IsNullOrEmpty)) {
+                        continue;
+                    }
                     data.Add(parser(cols));
                 }
             } catch (Exception e) {
+                Console.WriteLine("exeption :" + e.ToString());
                 return null;
             }
             return From(data);

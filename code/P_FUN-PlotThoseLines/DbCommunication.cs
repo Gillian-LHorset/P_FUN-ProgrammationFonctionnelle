@@ -70,7 +70,7 @@ namespace P_FUN_PlotThoseLines {
                 inserts.ForEach(t => t.DataSetId = newId);
             }
 
-            // ajout des nouvelles données qui peuvent être présentes dans les deux cas du if
+            // ajout des nouvelles données qui peuvent être présentes dans les deux cas du if précédent
             if (inserts.Any()) {
                 dbContext.Temp.AddRange(inserts);
             }

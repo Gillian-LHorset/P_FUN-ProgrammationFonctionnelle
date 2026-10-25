@@ -1,6 +1,7 @@
 ﻿using DataSeries;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -74,7 +75,11 @@ namespace P_FUN_PlotThoseLines {
         }
 
         private TemperatureSet ParseTemperatrue(string[] cols) {
-            TemperatureSet temp = new TemperatureSet(cols[0].Trim(), DateTime.Parse(cols[1]), Double.Parse(cols[2]));
+            TemperatureSet temp = new TemperatureSet(
+                cols[0].Trim(),
+                DateTime.Parse(cols[1]),
+                // CultureInfo.InvariantCulture allow period and comma for double
+                Double.Parse(cols[2], CultureInfo.InvariantCulture));
 
             return temp;
         }

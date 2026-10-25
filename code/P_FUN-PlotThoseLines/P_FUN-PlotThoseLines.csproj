@@ -22,4 +22,10 @@
     <ProjectReference Include="..\DataSeries\DataSeries.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="temperature.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
