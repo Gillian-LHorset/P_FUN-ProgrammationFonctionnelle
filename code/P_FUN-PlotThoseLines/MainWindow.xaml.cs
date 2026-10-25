@@ -58,14 +58,20 @@ namespace P_FUN_PlotThoseLines {
                 // need to write in this form because of the nullable Boolean
                 if (isDuplicate == true) {
                     if (_showedTemperatureSets.ContainsKey(id!.Value) && id is not null) { // case the plot is already present in the graph
-                        RemovePlotFromTheMainGraph(_showedTemperatureSets[id!.Value].graph);
-                        GraphLegende.Children.Remove(_showedTemperatureSets[id!.Value].legend);
+                        DeleteDatasetInGraph(_showedTemperatureSets[id!.Value].graph, _showedTemperatureSets[id!.Value].legend!);
                         _showedTemperatureSets[id!.Value] = (plot, legend);
                     } else {
                         _showedTemperatureSets.Add(DbCommunication.GetLastDataSetId(dbContext), (plot, legend));
                     }
                 } else {
                     _showedTemperatureSets.Add(DbCommunication.GetLastDataSetId(dbContext), (plot, legend));
+                }
+
+                if (_showedTemperatureSets.Count > MAX_GRAPH_SHOWED) {
+                    Scatter lastGraph = _showedTemperatureSets.First().Value.graph;
+                    TextBlock lastLegend = _showedTemperatureSets.First().Value.legend;
+                    DeleteDatasetInGraph(plot, legend);
+                    _showedTemperatureSets.Remove(_showedTemperatureSets.First().Key);
                 }
 
                 //MessageBox.Show($"count : {temperatures.Count}");
@@ -115,8 +121,9 @@ namespace P_FUN_PlotThoseLines {
             return temp;
         }
 
-        private void RemovePlotFromTheMainGraph(Scatter plot) {
+        private void DeleteDatasetInGraph(Scatter plot, TextBlock legend) {
             MainGraph.Plot.Remove(plot);
+            GraphLegende.Children.Remove(legend);
         }
     }
 
