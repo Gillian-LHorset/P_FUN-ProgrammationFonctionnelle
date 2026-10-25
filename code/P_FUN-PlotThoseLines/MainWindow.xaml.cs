@@ -66,10 +66,10 @@ namespace P_FUN_PlotThoseLines {
                         DeleteDatasetInGraph(_showedTemperatureSets[id!.Value].graph, _showedTemperatureSets[id!.Value].legend!);
                         _showedTemperatureSets[id!.Value] = (plot, legend);
                     } else {
-                        AddGraph(plot, legend);
+                        AddGraph(plot, legend, id!.Value);
                     }
                 } else {
-                    AddGraph(plot, legend);
+                    AddGraph(plot, legend, id!.Value);
                 }
 
                 if (_showedTemperatureSets.Count > MAX_GRAPH_SHOWED) {
@@ -140,15 +140,21 @@ namespace P_FUN_PlotThoseLines {
                 return;
             }
             loadableDatasets.ForEach(t => {
-                GraphiqueList.Items.Add(new MenuItem {
-                    Header = t.Item2,
-                    Tag = t.Item1
-                });
+                AddMenuItem(t.Item1, t.Item2);
             });
         }
 
-        private void AddGraph(Scatter plot, TextBlock legend) {
+        private void AddMenuItem(int id, string header) {
+            GraphiqueList.Items.Add(new MenuItem {
+                Header = header,
+                Tag = id
+            });
+        }
+
+        private void AddGraph(Scatter plot, TextBlock legend, int id) {
             _showedTemperatureSets.Add(DbCommunication.GetLastDataSetId(dbContext), (plot, legend));
+            loadableDatasets.Add((id, legend.Text));
+            AddMenuItem(id, legend.Text);
         }
     }
 
