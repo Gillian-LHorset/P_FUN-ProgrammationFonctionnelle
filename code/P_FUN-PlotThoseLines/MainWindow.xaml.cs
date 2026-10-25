@@ -40,11 +40,14 @@ namespace P_FUN_PlotThoseLines {
                     return;
                 }
 
-                await DbCommunication.RegisterDataInDB(dbContext, temperatures);
+                string title = await DbCommunication.RegisterDataInDB(dbContext, temperatures);
 
                 // TODO : récuperer le titre de la dataSerie
                 // TODO : supprimer l'ancien graphique en cas de mise à jour lié aux doublons
-                showData(temperatures, "tempString");
+                if (title == null) {
+                    return;
+                }
+                showData(temperatures, title);
 
                 //MessageBox.Show($"count : {temperatures.Count}");
             }
