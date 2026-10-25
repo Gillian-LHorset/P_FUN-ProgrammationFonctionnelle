@@ -1,6 +1,7 @@
 ﻿using DataSeries;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
+using ScottPlot.Plottables;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
@@ -42,7 +43,6 @@ namespace P_FUN_PlotThoseLines {
 
                 string title = await DbCommunication.RegisterDataInDB(dbContext, temperatures);
 
-                // TODO : récuperer le titre de la dataSerie
                 // TODO : supprimer l'ancien graphique en cas de mise à jour lié aux doublons
                 if (title == null) {
                     return;
@@ -57,27 +57,31 @@ namespace P_FUN_PlotThoseLines {
             double[] xPoints = temp.Values.Select(t => t.Time.ToOADate()).ToArray();
             double[] yPoints = temp.Values.Select(t => t.Temperature).ToArray();
 
-            var plot = MainGraph.Plot.Add.Scatter(xPoints, yPoints);
+            Scatter plot = MainGraph.Plot.Add.Scatter(xPoints, yPoints);
             MainGraph.Plot.Axes.DateTimeTicksBottom();
 
             // conversion du système de couleur de scottplot vers le système de WPF
-            var wpfColor = System.Windows.Media.Color.FromArgb(
+            Color wpfColor = System.Windows.Media.Color.FromArgb(
                 plot.Color.A,
                 plot.Color.R,
                 plot.Color.G,
                 plot.Color.B
             );
 
-            Brush graphColor = new SolidColorBrush(wpfColor);
+            ShowLegend(wpfColor, title);
+
+            MainGraph.Refresh();
+        }
+
+        private void ShowLegend(Color foregroundColor, string title) {
+            Brush legendBrush = new SolidColorBrush(foregroundColor);
 
             TextBlock legendeText = new TextBlock() {
                 Text = title,
                 Padding = new Thickness(25),
-                Foreground = graphColor
+                Foreground = legendBrush
             };
             GraphLegende.Children.Add(legendeText);
-
-            MainGraph.Refresh();
         }
 
         private TemperatureSet ParseTemperatrue(string[] cols) {
