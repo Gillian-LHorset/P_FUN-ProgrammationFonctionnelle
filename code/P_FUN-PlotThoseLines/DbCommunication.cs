@@ -119,5 +119,24 @@ namespace P_FUN_PlotThoseLines {
 
             return title ?? "";
         }
+
+        public static async Task<List<(int, string)>> GetAllDataset(TemperatureContext dbContext) {
+            // verify si la db existe
+            await dbContext.Database.EnsureCreatedAsync();
+
+            var datasets = new List<(int, string)>();
+
+            var connection = dbContext.Database.GetDbConnection();
+            await connection.OpenAsync();
+            using var command = connection.CreateCommand();
+            command.CommandText = "SELECT dataset_id, title FROM t_dataset";
+
+            using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync()) {
+                datasets.Add((reader.GetInt32(0), reader.GetString(1)));
+            }
+
+            return datasets;
+        }
     }
 }

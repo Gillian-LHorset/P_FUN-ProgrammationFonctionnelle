@@ -13,6 +13,7 @@ namespace P_FUN_PlotThoseLines {
     /// </summary>
     public partial class MainWindow : Window {
         TemperatureContext dbContext = new TemperatureContext();
+        List<(int, string)> loadableDatasets;
         // list of the Scatters present in the main graph
         private Dictionary<int, (Scatter graph, TextBlock? legend)> _showedTemperatureSets = new Dictionary<int, (Scatter, TextBlock?)>();
         private const int MAX_GRAPH_SHOWED = 5;
@@ -20,8 +21,12 @@ namespace P_FUN_PlotThoseLines {
 
         public MainWindow() {
             InitializeComponent();
-
+            LoadAllGraph();
             MainGraph.Refresh();
+        }
+
+        public async void OnGraphSelected(object sender, RoutedEventArgs e) {
+
         }
 
 
@@ -61,10 +66,10 @@ namespace P_FUN_PlotThoseLines {
                         DeleteDatasetInGraph(_showedTemperatureSets[id!.Value].graph, _showedTemperatureSets[id!.Value].legend!);
                         _showedTemperatureSets[id!.Value] = (plot, legend);
                     } else {
-                        _showedTemperatureSets.Add(DbCommunication.GetLastDataSetId(dbContext), (plot, legend));
+                        AddGraph(plot, legend);
                     }
                 } else {
-                    _showedTemperatureSets.Add(DbCommunication.GetLastDataSetId(dbContext), (plot, legend));
+                    AddGraph(plot, legend);
                 }
 
                 if (_showedTemperatureSets.Count > MAX_GRAPH_SHOWED) {
@@ -124,6 +129,26 @@ namespace P_FUN_PlotThoseLines {
         private void DeleteDatasetInGraph(Scatter plot, TextBlock legend) {
             MainGraph.Plot.Remove(plot);
             GraphLegende.Children.Remove(legend);
+        }
+
+        private async void LoadAllGraph() {
+            loadableDatasets = await DbCommunication.GetAllDataset(dbContext);
+            if (loadableDatasets.Count < 1) {
+                GraphiqueList.Items.Add(new MenuItem {
+                    Header = "Aucun graphique disponible."
+                });
+                return;
+            }
+            loadableDatasets.ForEach(t => {
+                GraphiqueList.Items.Add(new MenuItem {
+                    Header = t.Item2,
+                    Tag = t.Item1
+                });
+            });
+        }
+
+        private void AddGraph(Scatter plot, TextBlock legend) {
+            _showedTemperatureSets.Add(DbCommunication.GetLastDataSetId(dbContext), (plot, legend));
         }
     }
 
