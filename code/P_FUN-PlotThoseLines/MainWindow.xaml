@@ -27,31 +27,15 @@
 
         </DockPanel>
 
-        <Grid>
-            <TextBox Grid.Column="1" Text="Date de début" HorizontalAlignment="Right" VerticalAlignment="Center" Width="200" Height="40" TextAlignment="Center" />
 
-            <TextBox Grid.Column="1" Grid.Row="1" Text="Date de fin" HorizontalAlignment="Right" VerticalAlignment="Center" Width="200" Height="40" TextAlignment="Center" />
-
+        <Grid  Margin="0, 30, 0, 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.1*" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="0.1*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"></RowDefinition>
-                <RowDefinition Height="50"></RowDefinition>
-            </Grid.RowDefinitions>
-        </Grid>
-
-
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.1*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="0.1*" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition MinHeight="250"></RowDefinition>
+                <RowDefinition MinHeight="350"></RowDefinition>
             </Grid.RowDefinitions>
 
             <Border BorderBrush="Black" BorderThickness="1" Grid.Column="1">
