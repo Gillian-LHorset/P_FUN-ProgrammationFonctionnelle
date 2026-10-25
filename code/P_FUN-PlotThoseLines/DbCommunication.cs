@@ -44,6 +44,8 @@ namespace P_FUN_PlotThoseLines {
                 // car on part du principe qu'il s'agit du meme set de données
                 inserts.ForEach(t => t.DataSetId = existingDataSetId);
 
+                MessageBox.Show("Des doublons ont été détectés !\nLes données importées ont écrasé les données précédentes.", "Attention", MessageBoxButton.OK, MessageBoxImage.Warning);
+
             } else {
                 // cas où il n'y a pas de doublons dans la db
 
