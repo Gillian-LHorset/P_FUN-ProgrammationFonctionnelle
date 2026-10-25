@@ -175,11 +175,11 @@ namespace P_FUN_PlotThoseLines {
             loadableDatasets.Add((id, legend.Text));
             AddMenuItem(id, legend.Text);
 
-            if (_showedTemperatureSets.Count > MAX_GRAPH_SHOWED) {
-                Scatter lastGraph = _showedTemperatureSets.First().Value.graph;
-                TextBlock lastLegend = _showedTemperatureSets.First().Value.legend;
+            if (_showedTemperatureSets.Count > MAX_GRAPH_SHOWED) { // TODO : à tester
+                Scatter lastGraph = _showedTemperatureSets.Last().Value.graph;
+                TextBlock lastLegend = _showedTemperatureSets.Last().Value.legend;
                 DeleteDatasetInGraph(plot, legend);
-                _showedTemperatureSets.Remove(_showedTemperatureSets.First().Key);
+                _showedTemperatureSets.Remove(_showedTemperatureSets.Last().Key);
             }
         }
     }
