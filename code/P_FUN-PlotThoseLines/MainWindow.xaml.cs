@@ -22,6 +22,7 @@ namespace P_FUN_PlotThoseLines {
         public MainWindow() {
             InitializeComponent();
             LoadAllGraph();
+            LoadDefaultGraph(); // load the default graphic at the launch of the application
             MainGraph.Refresh();
         }
 
@@ -181,6 +182,18 @@ namespace P_FUN_PlotThoseLines {
                 DeleteDatasetInGraph(plot, legend);
                 _showedTemperatureSets.Remove(_showedTemperatureSets.Last().Key);
             }
+        }
+
+        private void LoadDefaultGraph() {
+            if (!loadableDatasets.Any()) {
+                return;
+            }
+            int id = loadableDatasets.First().Item1;
+
+            DataSeries<TemperatureSet> defaultTemps = DbCommunication.LoadSingleDataSet(dbContext, id).Result;
+
+            (Scatter, TextBlock) scatterInfos = showData(DbCommunication.LoadSingleDataSet(dbContext, id).Result, DbCommunication.GetDatasetName(dbContext, id));
+            _showedTemperatureSets.Add(id, scatterInfos);
         }
     }
 
