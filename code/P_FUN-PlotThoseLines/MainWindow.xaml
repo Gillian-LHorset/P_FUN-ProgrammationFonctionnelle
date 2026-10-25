@@ -20,7 +20,7 @@
                     <MenuItem Header="_Ouvrir" Click="dataImport" />
                 </MenuItem>
 
-                <MenuItem x:Name="GraphiqueList" Header="Changement de graphique" Click="OnGraphSelected" >
+                <MenuItem x:Name="GraphiqueList" Header="Changement de graphique" >
                 </MenuItem>
             </Menu>
 

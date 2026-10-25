@@ -13,7 +13,7 @@ namespace P_FUN_PlotThoseLines {
     /// </summary>
     public partial class MainWindow : Window {
         TemperatureContext dbContext = new TemperatureContext();
-        List<(int, string)> loadableDatasets;
+        List<(int, string)> loadableDatasets = new List<(int, string)>();
         // list of the Scatters present in the main graph
         private Dictionary<int, (Scatter graph, TextBlock? legend)> _showedTemperatureSets = new Dictionary<int, (Scatter, TextBlock?)>();
         private const int MAX_GRAPH_SHOWED = 5;
@@ -26,6 +26,15 @@ namespace P_FUN_PlotThoseLines {
         }
 
         public async void OnGraphSelected(object sender, RoutedEventArgs e) {
+            if (sender is MenuItem menuItem && menuItem.Tag is int id) {
+                if (_showedTemperatureSets.ContainsKey(id)) {
+                    DeleteDatasetInGraph(_showedTemperatureSets[id].graph, _showedTemperatureSets[id].legend!);
+                    _showedTemperatureSets.Remove(id);
+                } else {
+                    (Scatter, TextBlock) scatterInfos = showData(DbCommunication.LoadSingleDataSet(dbContext, id).Result, DbCommunication.GetDatasetName(dbContext, id));
+                    _showedTemperatureSets.Add(id, scatterInfos);
+                }
+            }
 
         }
 
@@ -60,23 +69,15 @@ namespace P_FUN_PlotThoseLines {
                 Scatter plot = dataInfos.Item1;
                 TextBlock legend = dataInfos.Item2;
 
-                // need to write in this form because of the nullable Boolean
+                // need to write in this form because of the nullable Boolean isDuplicate
                 if (isDuplicate == true) {
-                    if (_showedTemperatureSets.ContainsKey(id!.Value) && id is not null) { // case the plot is already present in the graph
+                    if (_showedTemperatureSets.ContainsKey(id!.Value) && id is not null) {
                         DeleteDatasetInGraph(_showedTemperatureSets[id!.Value].graph, _showedTemperatureSets[id!.Value].legend!);
                         _showedTemperatureSets[id!.Value] = (plot, legend);
-                    } else {
-                        AddGraph(plot, legend, id!.Value);
                     }
                 } else {
                     AddGraph(plot, legend, id!.Value);
-                }
 
-                if (_showedTemperatureSets.Count > MAX_GRAPH_SHOWED) {
-                    Scatter lastGraph = _showedTemperatureSets.First().Value.graph;
-                    TextBlock lastLegend = _showedTemperatureSets.First().Value.legend;
-                    DeleteDatasetInGraph(plot, legend);
-                    _showedTemperatureSets.Remove(_showedTemperatureSets.First().Key);
                 }
 
                 //MessageBox.Show($"count : {temperatures.Count}");
@@ -129,6 +130,7 @@ namespace P_FUN_PlotThoseLines {
         private void DeleteDatasetInGraph(Scatter plot, TextBlock legend) {
             MainGraph.Plot.Remove(plot);
             GraphLegende.Children.Remove(legend);
+            MainGraph.Refresh();
         }
 
         private async void LoadAllGraph() {
@@ -145,16 +147,28 @@ namespace P_FUN_PlotThoseLines {
         }
 
         private void AddMenuItem(int id, string header) {
-            GraphiqueList.Items.Add(new MenuItem {
+            MenuItem menuItem = new MenuItem {
                 Header = header,
-                Tag = id
-            });
+                Tag = id,
+                IsCheckable = true,
+                IsChecked = false
+            };
+            menuItem.Click += OnGraphSelected;
+
+            GraphiqueList.Items.Add(menuItem);
         }
 
         private void AddGraph(Scatter plot, TextBlock legend, int id) {
             _showedTemperatureSets.Add(DbCommunication.GetLastDataSetId(dbContext), (plot, legend));
             loadableDatasets.Add((id, legend.Text));
             AddMenuItem(id, legend.Text);
+
+            if (_showedTemperatureSets.Count > MAX_GRAPH_SHOWED) {
+                Scatter lastGraph = _showedTemperatureSets.First().Value.graph;
+                TextBlock lastLegend = _showedTemperatureSets.First().Value.legend;
+                DeleteDatasetInGraph(plot, legend);
+                _showedTemperatureSets.Remove(_showedTemperatureSets.First().Key);
+            }
         }
     }
 
