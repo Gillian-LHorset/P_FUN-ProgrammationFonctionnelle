@@ -25,6 +25,11 @@ namespace P_FUN_PlotThoseLines {
             MainGraph.Refresh();
         }
 
+        /// <summary>
+        /// Toggle the checkability of the item in the section of graphic change and remove or add him in the main graphic section.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public async void OnGraphSelected(object sender, RoutedEventArgs e) {
             if (sender is MenuItem menuItem && menuItem.Tag is int id) {
                 if (_showedTemperatureSets.ContainsKey(id)) {
@@ -71,7 +76,7 @@ namespace P_FUN_PlotThoseLines {
 
                 // need to write in this form because of the nullable Boolean isDuplicate
                 if (isDuplicate == true) {
-                    if (_showedTemperatureSets.ContainsKey(id!.Value) && id is not null) {
+                    if (_showedTemperatureSets.ContainsKey(id!.Value)) {
                         DeleteDatasetInGraph(_showedTemperatureSets[id!.Value].graph, _showedTemperatureSets[id!.Value].legend!);
                         _showedTemperatureSets[id!.Value] = (plot, legend);
                     }
@@ -158,6 +163,13 @@ namespace P_FUN_PlotThoseLines {
             GraphiqueList.Items.Add(menuItem);
         }
 
+        /// <summary>
+        /// Load and show the scatter from the db to the main graphique, add his info in the list of all scatter and add the item in the list of "Changement de graphique".
+        /// If the number of graphics is bigger than the maximum allow, remove the oldest scatter from the main graphic.
+        /// </summary>
+        /// <param name="plot"></param>
+        /// <param name="legend"></param>
+        /// <param name="id"></param>
         private void AddGraph(Scatter plot, TextBlock legend, int id) {
             _showedTemperatureSets.Add(DbCommunication.GetLastDataSetId(dbContext), (plot, legend));
             loadableDatasets.Add((id, legend.Text));
