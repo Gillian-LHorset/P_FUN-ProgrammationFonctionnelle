@@ -200,6 +200,9 @@ namespace P_FUN_PlotThoseLines {
     public class TemperatureContext : DbContext {
         // db structure
         public DbSet<TemperatureSet> Temp { get; set; }
+        public TemperatureContext() { }
+
+        public TemperatureContext(DbContextOptions<TemperatureContext> options) : base(options) { }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
             optionsBuilder.UseSqlite(
