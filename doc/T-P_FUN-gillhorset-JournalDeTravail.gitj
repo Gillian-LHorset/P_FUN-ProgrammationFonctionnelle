@@ -1,6 +1,9 @@
 {
   "projectName": "P_FUN-ProgrammationFonctionnelle",
-  "me": "Gillian-LHorset",
+  "me": [
+    "Gillian-LHorset",
+    "LeGG5"
+  ],
   "journalStartDate": null,
   "columns": [
     {
