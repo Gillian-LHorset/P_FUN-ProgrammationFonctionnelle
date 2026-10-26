@@ -13,6 +13,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DataSeries\DataSeries.csproj" />
+    <ProjectReference Include="..\P_FUN-PlotThoseLines\P_FUN-PlotThoseLines.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
   </ItemGroup>
 
