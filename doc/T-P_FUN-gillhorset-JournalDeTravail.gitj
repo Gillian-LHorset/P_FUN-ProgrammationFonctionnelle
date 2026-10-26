@@ -125,7 +125,7 @@
       "type": "commitless",
       "author": "Gillian-LHorset",
       "date": "2026-09-28T09:10:00.000Z",
-      "name": "Disscussion avec le chef de projet",
+      "name": "Discussion avec le chef de projet",
       "description": "",
       "duration": 10,
       "status": "DONE"
@@ -152,6 +152,32 @@
       "description": "",
       "duration": 10,
       "status": ""
+    },
+    {
+      "id": "46a1f7b6-8555-45de-b792-db6594e26f27",
+      "type": "commitless",
+      "author": [
+        "Gillian-LHorset",
+        "LeGG5"
+      ],
+      "date": "2026-10-26T09:50:00.000Z",
+      "name": "Discussion avec le chef de projet sur le retrait d'une user storie",
+      "description": "",
+      "duration": 10,
+      "status": "DONE"
+    },
+    {
+      "id": "c0d2b338-2004-457c-bcc2-ea8182fc2a96",
+      "type": "commitless",
+      "author": [
+        "Gillian-LHorset",
+        "LeGG5"
+      ],
+      "date": "2026-10-26T09:50:00.000Z",
+      "name": "Réponse aux questions du chef de projet sur le code",
+      "description": "",
+      "duration": 10,
+      "status": "DONE"
     }
   ]
 }
