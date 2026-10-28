@@ -18,8 +18,8 @@ namespace P_FUN_PlotThoseLines {
             // verify si la db existe
             await dbContext.Database.EnsureCreatedAsync();
 
-            // crée une hashmap avec le tuple (t.Location, t.Time) comme clé et TODO comme valeur
-            var existingDataDictionnary = (await dbContext.Temp.ToListAsync())
+            // crée une hashmap avec un tuple (t.Location, t.Time) comme clé et TemperatureSet comme valeur
+            Dictionary<(string Location, DateTime Time), TemperatureSet> existingDataDictionnary = (await dbContext.Temp.ToListAsync())
                 .ToDictionary(t => (t.Location, t.Time));
 
             // copie de la list temperatures
@@ -38,7 +38,7 @@ namespace P_FUN_PlotThoseLines {
                 // cas où il y a des doublons dans la db
 
                 // récupère le DataSetId de la première donnée en doublon
-                int existingDataSetId = existingDataDictionnary[(updates[0].Location, updates[0].Time)].DataSetId;
+                int existingDataSetId = existingDataDictionnary[(updates.First().Location, updates.First().Time)].DataSetId;
 
                 // écrase uniquement la température des doublons
                 updates.ForEach(t => existingDataDictionnary[(t.Location, t.Time)].Temperature = t.Temperature);
@@ -79,6 +79,7 @@ namespace P_FUN_PlotThoseLines {
                 );
 
                 // Toutes les données reçoivent ce newId
+                inserts = inserts.Select(ChangeId(newId)).ToList(); // TODO : vérifier si ca marche
                 inserts.ForEach(t => t.DataSetId = newId);
                 id = newId;
             }
@@ -138,5 +139,15 @@ namespace P_FUN_PlotThoseLines {
 
             return datasets;
         }
+
+        // ChangeId correspond au nom de la fonction
+        // la première fleche coresspond à la définition de la fonction ChangeId
+        // id correspond au premier paramètre de la fonction
+        // La deuxième fleche correspond à la déclaration de la deuxième fonction (temp)(celle en paramètre)
+        // La troisième fleche défini la fonction temp
+        public static Func<int, Func<TemperatureSet, TemperatureSet>> ChangeId =>
+            id => temp => new TemperatureSet(temp.Location, temp.Time, temp.Temperature) {
+                DataSetId = id
+            };
     }
 }
