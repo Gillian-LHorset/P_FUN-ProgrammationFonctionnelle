@@ -7,24 +7,20 @@
         public static DataSeries<T> From(IEnumerable<T> source) => new DataSeries<T>(source);
 
         public static DataSeries<T> FromCsv(string filename, Func<string[], T> parser) {
-            List<T> data = new List<T>();
             try {
-                List<string> content = File.ReadAllLines(filename).ToList();
-                foreach (string line in content.Skip(1)) {
-                    if (string.IsNullOrWhiteSpace(line)) {
-                        continue;
-                    }
-                    string[] cols = line.Split(';');
-                    if (cols.Any(string.IsNullOrEmpty)) {
-                        continue;
-                    }
-                    data.Add(parser(cols));
-                }
+                List<T> data = File.ReadLines(filename)
+                    .Skip(1)
+                    .Where(line => !string.IsNullOrWhiteSpace(line))
+                    .Select(line => line.Split(';'))
+                    .Where(cols => !cols.Any(string.IsNullOrEmpty))
+                    .Select(parser)
+                    .ToList();
+
+                return From(data);
             } catch (Exception e) {
                 Console.WriteLine("exeption :" + e.ToString());
                 return null;
             }
-            return From(data);
         }
 
         public int Count => _data.Count();

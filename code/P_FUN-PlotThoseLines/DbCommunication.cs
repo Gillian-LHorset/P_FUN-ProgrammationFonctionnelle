@@ -79,8 +79,7 @@ namespace P_FUN_PlotThoseLines {
                 );
 
                 // Toutes les données reçoivent ce newId
-                inserts = inserts.Select(ChangeId(newId)).ToList(); // TODO : vérifier si ca marche
-                inserts.ForEach(t => t.DataSetId = newId);
+                inserts = inserts.Select(ChangeId(newId)).ToList();
                 id = newId;
             }
 
